@@ -4,6 +4,7 @@ PC = 0
 SYSCLK = 0
 TCYCLE = 0
 runcount=0
+NOP = False
 
 bus = {
   'VCC': True,
@@ -48,6 +49,7 @@ regs = {
   'CREG' : 0,
   'DREG' : 0,
   'PC' : 0,
+  'IR' : 0,
   'ZREG' : 0,
   'ALPHA' : 0,
   'BETA' : 0,
@@ -63,29 +65,7 @@ regs = {
 mem = [1,1,2,16,0,0,0,0]
 #LDAI 1, ADDAI, 16, NOP, NOP, NOP, NOP
 
-def bus_print():
-  pp=[]
-  for a in bus :
-    if (bus[a]==True):
-      pp.append(1)
-    else:
-      pp.append(0)
-  print(pp)
 
-def sig_print():
-  print('  ')
-  for b in sigs:
-    print(b, sigs[b])
-  print(' ')
-
-def update_bus(runcount):
-  print('   ')
-  print('bus update')
-  print('   ')
-  if (runcount%16):
-      sigs['PC_TICK']=True
-  if ((runcount-1)%16):
-      sigs['PC_TICK']=False
 
 #tgen returns a new tcycle. If mode is set to False the tgen returns a 0, resetting the tcycle.
 
@@ -94,19 +74,15 @@ def tgen(tcyk,mode):
     return 0
   else :
     return tcyk+1
+#run_fetch runs the mechanics of the fetch cycle, advances TCYCLE to 3 and sets up for interpreting the opcode
+
+def run_fetch():
+    pass
+    #do the fetch cycle
+
 
 while(bus['_HLT']==True):
-  #update the two next lines to read SYSCLK later
-  bus['SYSCLK']= not (bus['SYSCLK']); #update this
-  sleep(1)  #and this
-  # if (bus['SYSCLK']) etc etc
-  bus_print()
-  sig_print()
-  input()
-  update_bus(runcount)
-  print('PC = ', PC);
-  if (sigs['PC_TICK']==True):
-    PC+=1
-  runcount+=1
-  TCYCLE=tgen(TCYCLE, True)
-  print(TCYCLE)
+    if (TCYCLE==0):
+        run_fetch()
+    if (regs['IR']==100):
+        
