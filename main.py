@@ -62,6 +62,15 @@ regs = {
   'CARRYFLAG' : False
 }
 
+isa = {
+'NOP': ['NOP'],
+'FETCH' : [['PC_WRITE', 'MAR_LOAD'],['MDR_READ','PC_TICK'],['MDR_WRITE', 'IR_LOAD']],
+'LDAI' : [['PC_WRITE', 'MAR_LOAD'],['MDR_READ','PC_TICK'],['MDR_WRITE','MDR_LOW','AREG_LOAD']],
+'LDBI' : [['PC_WRITE','MAR_LOAD'],['MDR_READ','PC_TICK'],['MDR_WRITE','MDR_HIGH','BREG_LOAD']],
+
+
+}
+
 mem = [1,1,2,16,0,0,0,0]
 #LDAI 1, ADDAI, 16, NOP, NOP, NOP, NOP
 
@@ -85,4 +94,3 @@ while(bus['_HLT']==True):
     if (TCYCLE==0):
         run_fetch()
     if (regs['IR']==100):
-        
