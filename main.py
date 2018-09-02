@@ -64,15 +64,32 @@ regs = {
 
 isa = {
 'NOP': ['NOP'],
-'FETCH' : [['PC_WRITE', 'MAR_LOAD'],['MDR_READ','PC_TICK'],['MDR_WRITE', 'IR_LOAD']],
-'LDAI' : [['PC_WRITE', 'MAR_LOAD'],['MDR_READ','PC_TICK'],['MDR_WRITE','MDR_LOW','AREG_LOAD']],
-'LDBI' : [['PC_WRITE','MAR_LOAD'],['MDR_READ','PC_TICK'],['MDR_WRITE','MDR_HIGH','BREG_LOAD']],
-
-
+'FETCH' : [['PC_WRITE', 'MAR_LOAD'],
+        ['MDR_READ','PC_TICK'],
+        ['MDR_WRITE', 'IR_LOAD']],
+'LDAI': [['PC_WRITE', 'MAR_LOAD'],
+        ['MDR_READ','PC_TICK'],
+        ['MDR_WRITE','MDR_LOW','AREG_LOAD']],
+'LDBI': [['PC_WRITE','MAR_LOAD'],
+        ['MDR_READ','PC_TICK'],
+        ['MDR_WRITE','MDR_HIGH','BREG_LOAD']],
+'LDCI': [['PC_WRITE','MAR_LOAD'],
+        ['MDR_READ','PC_TICK'],
+        ['MDR_WRITE','MDR_LOW','CREG_LOAD']],
+'LDDI': [['PC_WRITE','MAR_LOAD'],
+        ['MDR_READ','PC_TICK'],
+        ['MDR_WRITE','MDR_HIGH','DREG_LOAD']],
+'STA' : [['PC_WRITE','MAR_LOAD'],
+        ['MDR_READ', 'PC_TICK'],
+        ['MDR_WRITE','MDR_LOW','ALUA_LOAD'],
+        ['PC_WRITE','MAR_LOAD'],
+        ['MDR_READ', 'PC_TICK'],
+        ['MDR_WRITE','MDR_HIGH','ALUOP','ALUB_ZERO','ALUY_WRITE','ALUY_LOW','MAR_LOAD'],
+        ['MDR_LOAD','AREG_WRITE']]
 }
 
-mem = [1,1,2,16,0,0,0,0]
-#LDAI 1, ADDAI, 16, NOP, NOP, NOP, NOP
+mem = ['LDAI',8,'STA',0x00,0xFF,'NOP']
+
 
 
 
@@ -90,7 +107,14 @@ def run_fetch():
     #do the fetch cycle
 
 
-while(bus['_HLT']==True):
-    if (TCYCLE==0):
-        run_fetch()
-    if (regs['IR']==100):
+#while(bus['_HLT']==True):
+#    if (TCYCLE==0):
+#        run_fetch()
+#    if (regs['IR']==100):
+counter =0
+for a in isa:
+    print(a)
+    for b in isa[a]:
+        print(counter,b)
+        counter+=1
+    counter = 0
