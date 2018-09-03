@@ -39,7 +39,11 @@ sigs = {
   'PC_LOAD':False,
   'PC_WRITE':False,
   'MAR_LOAD':False,
-  'MAR_WRITE':False
+  'MAR_WRITE':False,
+  'MDR_READ' :False,
+  'MDR_HIGH':False,
+  'MDR_LOW':False,
+  'MDR_WRITE':False
 
 }
 
@@ -91,30 +95,28 @@ isa = {
 mem = ['LDAI',8,'STA',0x00,0xFF,'NOP']
 
 
+#execute does whatever the sent opcode implies
+def execute_fetch(opcode):
+    TCYCLE=0
+    for a in opcode:
+        print(a, TCYCLE)
+        TCYCLE +=1
+        for b in a:
+            print(b)
+
+def execute(opcode):
+    TCYCLE=3
+    for a in opcode:
+        print (a, TCYCLE)
+        TCYCLE +=1
+        for b in a:
+            if (sigs[b]==True):
+                print(b, True)
+            else:
+                print(b,False)
 
 
-#tgen returns a new tcycle. If mode is set to False the tgen returns a 0, resetting the tcycle.
-
-def tgen(tcyk,mode):
-  if (mode == False):
-    return 0
-  else :
-    return tcyk+1
-#run_fetch runs the mechanics of the fetch cycle, advances TCYCLE to 3 and sets up for interpreting the opcode
-
-def run_fetch():
-    pass
-    #do the fetch cycle
 
 
-#while(bus['_HLT']==True):
-#    if (TCYCLE==0):
-#        run_fetch()
-#    if (regs['IR']==100):
-counter =0
-for a in isa:
-    print(a)
-    for b in isa[a]:
-        print(counter,b)
-        counter+=1
-    counter = 0
+execute_fetch(isa['FETCH'])
+execute(isa[mem[0]])
