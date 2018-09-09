@@ -66,6 +66,24 @@ regs = {
   'CARRYFLAG' : False
 }
 
+gpio_map = {
+    'SYSCLK' : 'GPIO1',
+    'L0' : 'GPIO2',
+    'L1' : 'GPIO3',
+    'L2' : 'GPIO4',
+    'L3' : 'GPIO5',
+    'L4' : 'GPIO6',
+    'L5' : 'GPIO7',
+    'L6' : 'GPIO8',
+    'L7' : 'GPIO9',
+    '_CLR_RESET' : 'GPIO10',
+    '_HLT' : 'GPIO11',
+    'PC_TICK' : 'GPIO12',
+    '_PC_WRITE' : 'GPIO13',
+    'AREG_LOAD' : 'GPIO14',
+    'AREG_WRITE' : 'GPIO15'
+}
+
 isa = {
 'NOP': ['NOP'],
 'FETCH' : [['PC_WRITE', 'MAR_LOAD'],
@@ -100,9 +118,13 @@ def execute_fetch(opcode):
     TCYCLE=0
     for a in opcode:
         print(a, TCYCLE)
-        TCYCLE +=1
         for b in a:
             print(b)
+        TCYCLE +=1
+
+
+
+
 
 def execute(opcode):
     TCYCLE=3
