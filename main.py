@@ -113,31 +113,7 @@ isa = {
 
 mem = ['LDAI',8,'STA',0x00,0xFF,'NOP']
 
-
-#execute does whatever the sent opcode implies
-def execute_fetch(opcode):
-    TCYCLE=0
-    for a in opcode:
-        print(a, TCYCLE)
-        for b in a:
-            print(b)
-        TCYCLE +=1
-
-
-
-
-
-def execute(opcode):
-    TCYCLE=3
-    for a in opcode:
-        print (a, TCYCLE)
-        TCYCLE +=1
-        for b in a:
-            if (sigs[b]==True):
-                print(b, True)
-            else:
-                print(b,False)
-
+#Code section
 
 def tcycle_gen(t):
     """ returns a new tcycle number """
@@ -153,9 +129,6 @@ def cuteprint(sig):
     print(pstr, bus['SYSCLK'])
 
 
-
-#execute_fetch(isa['FETCH'])
-#execute(isa[mem[0]])
 
 
 #execute fetch cycle
