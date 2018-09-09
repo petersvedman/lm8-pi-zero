@@ -5,6 +5,7 @@ SYSCLK = 0
 TCYCLE = 0
 runcount=0
 NOP = False
+IR = []
 
 bus = {
   'VCC': True,
@@ -43,7 +44,8 @@ sigs = {
   'MDR_READ' :False,
   'MDR_HIGH':False,
   'MDR_LOW':False,
-  'MDR_WRITE':False
+  'MDR_WRITE':False,
+  'IR_LOAD':False
 
 }
 
@@ -84,11 +86,10 @@ gpio_map = {
     'AREG_WRITE' : 'GPIO15'
 }
 
+fetch = [['PC_WRITE', 'MAR_LOAD'], ['MDR_READ','PC_TICK'], ['MDR_WRITE', 'IR_LOAD']]
+
 isa = {
 'NOP': ['NOP'],
-'FETCH' : [['PC_WRITE', 'MAR_LOAD'],
-        ['MDR_READ','PC_TICK'],
-        ['MDR_WRITE', 'IR_LOAD']],
 'LDAI': [['PC_WRITE', 'MAR_LOAD'],
         ['MDR_READ','PC_TICK'],
         ['MDR_WRITE','MDR_LOW','AREG_LOAD']],
@@ -138,7 +139,50 @@ def execute(opcode):
                 print(b,False)
 
 
+def tcycle_gen(t):
+    """ returns a new tcycle number """
+    return t+1
+
+def cuteprint(sig):
+    pstr = 'sigs : '
+    for a in sig:
+        if (sigs[a]==True):
+            pstr+=('1')
+        else:
+            pstr+=('0')
+    print(pstr, bus['SYSCLK'])
 
 
-execute_fetch(isa['FETCH'])
-execute(isa[mem[0]])
+
+#execute_fetch(isa['FETCH'])
+#execute(isa[mem[0]])
+
+
+#execute fetch cycle
+for a in fetch:
+    for b in a:
+        sigs[b] = not sigs[b]
+    TCYCLE+=1
+    cuteprint(sigs)
+    bus['SYSCLK'] = not bus['SYSCLK']
+    sleep(1)
+    bus['SYSCLK'] = not bus['SYSCLK']
+    for b in a:
+        sigs[b] = not sigs[b]
+    cuteprint(sigs)
+print('fetch done')
+#load opcode into IR
+IR=mem[0]
+print(IR)
+#execute opcode in IR
+for a in isa[IR]:
+    for b in a:
+        sigs[b] = not sigs[b]
+    TCYCLE+=1
+    cuteprint(sigs)
+    bus['SYSCLK'] = not bus['SYSCLK']
+    sleep(1)
+    bus['SYSCLK'] = not bus['SYSCLK']
+    for b in a:
+        sigs[b] = not sigs[b]
+    cuteprint(sigs)
